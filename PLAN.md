@@ -144,3 +144,40 @@ These are estimates for one developer working with AI assistance.
 3. Do you have, or can you build, an audience before launch?
 4. Seller entity and payment provider (depends on your country).
 5. Do you want me to scaffold the Next.js + Stripe + Postgres project (P0) next?
+
+---
+
+## 12. Decisions made (21 Oct 2026)
+
+- **Niche to start:** AI tools and SaaS. Other categories open later.
+- **Build timing:** scaffold later, after the name and domain are chosen. More features will be added over time.
+- **Stack:** Next.js (App Router) + TypeScript, Postgres via Supabase, MDX blog inside the same app (one codebase, SEO-friendly), hosted on Vercel.
+- **Payments:** sell worldwide without a country-specific entity, so use a Merchant of Record (Paddle or Lemon Squeezy), which handles global sales tax/VAT. Put payments behind a small provider interface so we can switch to Stripe later if a legal entity exists. Confirm account eligibility and terms before committing.
+- **Audience (none today), start from day one:**
+  - Blog: 2-3 posts a week. Topics: "best AI tools for X", weekly "AI tools leaderboard" recaps, SaaS launch teardowns, rank-battle stories, how-to guides for founders.
+  - Programmatic SEO pages per category and season, once data exists.
+  - Newsletter: weekly top-10 digest with email signup on every page.
+  - Social: Facebook and Instagram (owner creates the pages), plus X and LinkedIn where AI/SaaS founders are. Auto-generated winner cards for each.
+  - Seed listings: invite 50-100 AI/SaaS makers to list free before paid bids open.
+  - Embeddable leaderboard widget for backlinks.
+
+## 13. Name candidates (availability NOT checked)
+
+Check domains, trademarks and social handles before committing.
+
+| Name | Idea |
+|---|---|
+| RankRush | fast, competitive |
+| TopStack | top of the SaaS/AI stack |
+| AIPodium | podium for AI tools |
+| ToolTower | tower of tools (nods to the building metaphor) |
+| SaaSArena | arena where products fight for rank |
+| BidBoard | simple, says what it does |
+| SummitList | climb to the summit |
+| ClimbRank | ranking as a climb |
+| Outrank.ai | strong, but likely taken |
+| PeakPosition | top spot |
+| StackSummit | SaaS plus summit |
+| TopSpot.ai | short, memorable |
+
+Top picks: **ToolTower**, **AIPodium**, **RankRush**.
