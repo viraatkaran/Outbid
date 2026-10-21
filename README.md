@@ -1,4 +1,4 @@
-# Rank marketplace (working title: ToolTower)
+# Rank marketplace (BillboardRank)
 
 A paid-placement leaderboard for AI tools and SaaS with verified click analytics, a blog and a newsletter. See `PLAN.md` for strategy.
 
@@ -33,3 +33,12 @@ Set `NEXT_PUBLIC_BRAND_NAME` and `NEXT_PUBLIC_SITE_URL` once the name/domain is 
 
 ## Not built yet (roadmap)
 3D/2.5D skyline, challenges between rivals, hall of fame/trophies, regional boards, domain verification, agency accounts, conversion pixels, i18n.
+
+## Deploy on Railway
+1. New project, deploy from this GitHub repo (branch of your choice).
+2. Add a **Volume** to the service, mount path `/data`.
+3. Variables: `DATABASE_PATH=/data/app.db`, `NEXT_PUBLIC_BRAND_NAME=BillboardRank`, `NEXT_PUBLIC_SITE_URL=https://<your domain or railway URL>`, `HASH_SECRET=<long random string>`, `PAYMENT_WEBHOOK_SECRET=<long random string>`, `ADMIN_KEY=<long random string>`. Leave `ALLOW_MOCK_PAYMENTS` unset for a public site (the test checkout is then disabled), or set it to `1` only for a private preview.
+4. Settings, Networking: generate a domain, later add `billboardrank.com` and set the DNS records Railway shows.
+5. Health check is `/api/health`. Run a single replica only: SQLite is one file on one volume.
+6. Do **not** run `npm run seed` in production.
+`NEXT_PUBLIC_*` variables are read at build time, so redeploy after changing them.

@@ -1,4 +1,4 @@
-export const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "ToolTower";
+export const BRAND = process.env.NEXT_PUBLIC_BRAND_NAME || "BillboardRank";
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
 export const TAGLINE = "The leaderboard for AI tools & SaaS. Pay to climb, with verified clicks to prove it.";
 
