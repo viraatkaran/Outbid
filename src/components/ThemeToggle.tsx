@@ -7,7 +7,7 @@ export default function ThemeToggle() {
       style={{ cursor: "pointer", background: "none", color: "inherit", fontSize: "1.1rem", lineHeight: 1, padding: "5px 11px" }}
       onClick={() => {
         const root = document.documentElement;
-        const dark = root.dataset.theme !== "light";
+        const dark = root.dataset.theme === "dark";
         const next = dark ? "light" : "dark";
         root.dataset.theme = next;
         try { localStorage.setItem("theme", next); } catch {}
