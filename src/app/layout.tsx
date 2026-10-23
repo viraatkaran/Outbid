@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { BRAND, SITE_URL, TAGLINE } from "../lib/config";
-import { Footer, Header } from "../components/Shell";
+import { Footer, Header, Ticker } from "../components/Shell";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -20,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
       <body>
+        <Ticker />
         <div className="wrap"><Header />{children}</div>
         <Footer />
       </body>

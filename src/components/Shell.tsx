@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { BRAND } from "../lib/config";
-import { siteStats } from "../lib/rank";
+import { BRAND, fmtUsd } from "../lib/config";
+import { getBoard, siteStats } from "../lib/rank";
 import ThemeToggle from "./ThemeToggle";
 import Newsletter from "./Newsletter";
 
@@ -10,7 +10,7 @@ export function Header() {
   const splitAt = lastCap > 0 ? lastCap : Math.ceil(BRAND.length / 2);
   return (
     <header className="top">
-      <Link href="/" className="logo">{BRAND.slice(0, splitAt)}<b>{BRAND.slice(splitAt)}</b></Link>
+      <Link href="/" className="logo"><span>{BRAND.slice(0, splitAt)}<b>{BRAND.slice(splitAt)}</b></span></Link>
       <span className="pill"><span className="dot" />{s.clicksToday.toLocaleString()} verified clicks today</span>
       <nav className="main">
         <Link href="/blog">Blog</Link>
@@ -39,5 +39,27 @@ export function Footer() {
         <div>© {new Date().getFullYear()} {BRAND}. Rankings reflect paid placement.</div>
       </div>
     </footer>
+  );
+}
+
+export function Ticker() {
+  const rows = getBoard({ period: "all", limit: 10 });
+  const render = (prefix: string) =>
+    rows.length ? (
+      rows.map((r, i) => (
+        <span key={prefix + r.id}>
+          <span className="t">#{i + 1}</span> <b>{r.title.slice(0, 28)}</b> <span className="t">{fmtUsd(r.total_cents)}</span>
+        </span>
+      ))
+    ) : (
+      <span key={prefix}><b>LIVE</b> <span className="t">The billboard is empty. Claim the first slot.</span></span>
+    );
+  return (
+    <div className="ticker" aria-label="Live leaderboard ticker">
+      <div className="track">
+        {render("a")}
+        <span aria-hidden="true" style={{ display: "contents" }}>{render("b")}</span>
+      </div>
+    </div>
   );
 }

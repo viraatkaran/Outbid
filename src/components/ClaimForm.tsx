@@ -35,7 +35,7 @@ export default function ClaimForm({ categories, leaderCents, defaultCategory }: 
           Claim #1 for{" "}
           <span className="stepper">
             <button type="button" aria-label="Decrease" onClick={() => setAmount((a) => Math.max(1, a - 1))}>−</button>
-            <span className="price">${amount.toLocaleString()}</span>
+            <span className="price" key={amount}>${amount.toLocaleString()}</span>
             <button type="button" aria-label="Increase" onClick={() => setAmount((a) => a + 1)}>+</button>
           </span>
         </h1>
