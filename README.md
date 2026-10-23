@@ -20,14 +20,14 @@ Every listing has one country and one category. Payments are made at one of thre
 - Boards: worldwide top 100, a top 100 for each country, and a board for every category inside each country (100+ categories, about 200 countries) with search. All-time, month, week and today views. Ties go to whoever reached the total first.
 - Emails (Resend): receipt with dashboard link, outbid alerts, dashboard-link recovery at `/recover`, weekly digest via `POST /api/cron/digest`. Without `RESEND_API_KEY` emails are only recorded in the outbox on `/admin`.
 - Claim flow: URL or @handle, category, amount, optional email, then checkout. Site title/description are fetched with an SSRF guard.
-- Payments: **test mode only** (`PAYMENT_PROVIDER=mock`). Orders are fulfilled idempotently in a transaction. A signed webhook endpoint exists (`/api/webhooks/payments`). The mock checkout is blocked in production unless `ALLOW_MOCK_PAYMENTS=1`.
+- Payments: Stripe Checkout (`PAYMENT_PROVIDER=stripe`, webhook at `/api/webhooks/stripe`, amounts and currency verified before fulfilling). `mock` is a test mode with no real money. Orders are fulfilled idempotently in a transaction. A signed webhook endpoint exists (`/api/webhooks/payments`). The mock checkout is blocked in production unless `ALLOW_MOCK_PAYMENTS=1`.
 - Click tracking via `/go/[slug]`: every click is stored, only the first non-bot click per visitor per day is "verified".
 - Owner dashboard at the private `/manage/[token]` link: clicks (14 days), referrers, countries, cost per verified click, payment history.
 - Public listing pages with share card images (`/api/og/[slug]`), embeddable widget (`/embed`), JSON API (`/api/v1/leaderboard`).
 - Blog (Markdown in `content/blog`), RSS, sitemap, robots, newsletter signup, report button, admin page (`/admin?key=ADMIN_KEY`), dark mode.
 
 ## Before real launch (not done yet)
-1. **Real payments:** implement a provider in `src/lib/payments.ts` (Paddle / Lemon Squeezy / Stripe) and call `fulfillOrder` from its verified webhook. Adapt the webhook to the provider's signature format.
+1. **Real payments:** set `PAYMENT_PROVIDER=stripe`, `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` (use test keys first), remove `ALLOW_MOCK_PAYMENTS`. Refund and dispute handling is not automated yet.
 2. **Database:** SQLite is a single file on one server. For Vercel/serverless, move to Postgres (e.g. Supabase); `src/lib/db.ts` and the SQL in `rank.ts`, `listings.ts` and `track.ts` need porting.
 3. **Email:** create a Resend account, verify your domain, and set `RESEND_API_KEY` and `EMAIL_FROM` (see `.env.example`). Schedule the weekly digest with a cron call to `/api/cron/digest`.
 4. **Owner access:** the private link is the only credential; add email login or emailing the link.

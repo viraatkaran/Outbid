@@ -1,10 +1,10 @@
 import crypto from "node:crypto";
 import type { Order } from "./listings";
+import { createStripeCheckout } from "./stripe";
 
 /**
- * Payment provider boundary. Only "mock" (test mode, no real money) is implemented.
- * To go live, add a provider here (Paddle / Lemon Squeezy / Stripe): create a hosted checkout for the order,
- * set the order id in the provider's custom data, and call fulfillOrder() from the provider's verified webhook.
+ * Payment provider boundary. "stripe" creates a hosted Stripe Checkout page and is fulfilled by /api/webhooks/stripe.
+ * "mock" is a test mode with no real money. Selected with PAYMENT_PROVIDER.
  */
 export function providerName() {
   return process.env.PAYMENT_PROVIDER || "mock";
@@ -19,7 +19,8 @@ export async function createCheckout(order: Order): Promise<{ url: string }> {
     if (!mockAllowed()) throw new Error("Payments are not configured.");
     return { url: `/checkout/${order.id}` };
   }
-  throw new Error(`Payment provider "${providerName()}" is not implemented yet.`);
+  if (providerName() === "stripe") return { url: await createStripeCheckout(order) };
+  throw new Error(`Payment provider "${providerName()}" is not implemented.`);
 }
 
 export function verifyWebhookSignature(rawBody: string, signature: string | null): boolean {

@@ -12,6 +12,8 @@ import { COUNTRIES, getCountryBySlug, isCountryCode } from "../src/lib/countries
 import { floorCents, type Scope } from "../src/lib/pricing";
 import { CATEGORIES, isCategory } from "../src/lib/config";
 import { db } from "../src/lib/db";
+import crypto from "node:crypto";
+import { verifyStripeSignature } from "../src/lib/stripe";
 
 const tick = () => new Promise((r) => setTimeout(r, 60));
 const mails = (to?: string) =>
@@ -153,4 +155,14 @@ test("click verification dedupes and filters bots", async () => {
   assert.equal(a.referrers[0].name, "news.ycombinator.com");
   assert.ok(isBot(null));
   assert.ok(getRank(row.id, { scope: "category", country: "NZ", category: "bakeries" }));
+});
+
+test("stripe webhook signature", () => {
+  const secret = "whsec_test", body = '{"id":"evt_1"}', t = 1_800_000_000;
+  const sig = crypto.createHmac("sha256", secret).update(`${t}.${body}`).digest("hex");
+  assert.ok(verifyStripeSignature(body, `t=${t},v1=${sig}`, secret, t + 10));
+  assert.ok(!verifyStripeSignature(body + " ", `t=${t},v1=${sig}`, secret, t + 10), "tampered body");
+  assert.ok(!verifyStripeSignature(body, `t=${t},v1=${sig}`, "other", t + 10), "wrong secret");
+  assert.ok(!verifyStripeSignature(body, `t=${t},v1=${sig}`, secret, t + 3600), "too old");
+  assert.ok(!verifyStripeSignature(body, null, secret, t) && !verifyStripeSignature(body, `t=${t},v1=${sig}`, undefined, t));
 });

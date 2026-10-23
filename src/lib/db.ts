@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS orders (
   scope TEXT NOT NULL DEFAULT 'category',
   amount_cents INTEGER NOT NULL,
   email TEXT,
+  created_listing INTEGER NOT NULL DEFAULT 0,
   status TEXT NOT NULL DEFAULT 'pending',
   created_at TEXT NOT NULL
 );
@@ -94,6 +95,7 @@ function migrate(d: Database.Database) {
   addColumn("listings", "alerts", "INTEGER NOT NULL DEFAULT 1");
   addColumn("orders", "country", "TEXT NOT NULL DEFAULT 'US'");
   addColumn("orders", "scope", "TEXT NOT NULL DEFAULT 'category'");
+  addColumn("orders", "created_listing", "INTEGER NOT NULL DEFAULT 0");
   addColumn("bids", "scope", "TEXT NOT NULL DEFAULT 'category'");
   addColumn("subscribers", "token", "TEXT");
   d.exec("UPDATE subscribers SET token = lower(hex(randomblob(16))) WHERE token IS NULL");

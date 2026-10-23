@@ -56,7 +56,7 @@ export async function createOrder(input: OrderInput) {
 
 export type Order = {
   id: string; listing_id: number | null; url: string; domain: string; title: string; description: string;
-  category: string; country: string; scope: Scope; amount_cents: number; email: string | null; status: string; created_at: string;
+  category: string; country: string; scope: Scope; amount_cents: number; email: string | null; created_listing: number; status: string; created_at: string;
 };
 export const getOrder = (id: string) => db().prepare("SELECT * FROM orders WHERE id = ?").get(id) as Order | undefined;
 
@@ -93,7 +93,7 @@ export function fulfillOrder(orderId: string, paymentRef: string): Fulfilled {
     d.prepare("INSERT INTO bids (listing_id, amount_cents, scope, payment_ref, created_at) VALUES (?,?,?,?,?)").run(
       listing.id, order.amount_cents, order.scope, paymentRef, nowIso(),
     );
-    d.prepare("UPDATE orders SET status='paid', listing_id=? WHERE id=?").run(listing.id, order.id);
+    d.prepare("UPDATE orders SET status='paid', listing_id=?, created_listing=? WHERE id=?").run(listing.id, created ? 1 : 0, order.id);
     return { listingId: listing.id, slug: listing.slug, ownerToken: listing.owner_token, created };
   });
   return tx();
