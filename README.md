@@ -13,8 +13,12 @@ npm run build && npm start
 ```
 Set `NEXT_PUBLIC_BRAND_NAME` and `NEXT_PUBLIC_SITE_URL` once the name/domain is chosen.
 
+## Ranking model
+Every listing has one country and one category. Payments are made at one of three levels (category, country, worldwide); a payment counts on its own board and every board below it. See `PLAN.md` section 14 for starting prices.
+
 ## What's built
-- Leaderboards: all-time, month, week, today, per category. Ties go to whoever reached the total first.
+- Boards: worldwide top 100, a top 100 for each country, and a board for every category inside each country (100+ categories, about 200 countries) with search. All-time, month, week and today views. Ties go to whoever reached the total first.
+- Emails (Resend): receipt with dashboard link, outbid alerts, dashboard-link recovery at `/recover`, weekly digest via `POST /api/cron/digest`. Without `RESEND_API_KEY` emails are only recorded in the outbox on `/admin`.
 - Claim flow: URL or @handle, category, amount, optional email, then checkout. Site title/description are fetched with an SSRF guard.
 - Payments: **test mode only** (`PAYMENT_PROVIDER=mock`). Orders are fulfilled idempotently in a transaction. A signed webhook endpoint exists (`/api/webhooks/payments`). The mock checkout is blocked in production unless `ALLOW_MOCK_PAYMENTS=1`.
 - Click tracking via `/go/[slug]`: every click is stored, only the first non-bot click per visitor per day is "verified".
@@ -25,7 +29,7 @@ Set `NEXT_PUBLIC_BRAND_NAME` and `NEXT_PUBLIC_SITE_URL` once the name/domain is 
 ## Before real launch (not done yet)
 1. **Real payments:** implement a provider in `src/lib/payments.ts` (Paddle / Lemon Squeezy / Stripe) and call `fulfillOrder` from its verified webhook. Adapt the webhook to the provider's signature format.
 2. **Database:** SQLite is a single file on one server. For Vercel/serverless, move to Postgres (e.g. Supabase); `src/lib/db.ts` and the SQL in `rank.ts`, `listings.ts` and `track.ts` need porting.
-3. **Email:** send owner links, outbid alerts and the newsletter through an email provider (emails are stored but nothing is sent yet).
+3. **Email:** create a Resend account, verify your domain, and set `RESEND_API_KEY` and `EMAIL_FROM` (see `.env.example`). Schedule the weekly digest with a cron call to `/api/cron/digest`.
 4. **Owner access:** the private link is the only credential; add email login or emailing the link.
 5. **Abuse controls:** the rate limiter is in-memory; use a shared store. Add URL safety checks and an admin review queue.
 6. **Legal:** have `/rules` (terms, refunds, disclosure) reviewed; add a privacy policy.

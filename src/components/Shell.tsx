@@ -13,6 +13,7 @@ export function Header() {
       <Link href="/" className="logo"><span>{BRAND.slice(0, splitAt)}<b>{BRAND.slice(splitAt)}</b></span></Link>
       <span className="pill"><span className="dot" />{s.clicksToday.toLocaleString()} verified clicks today</span>
       <nav className="main">
+        <Link href="/countries">Countries</Link>
         <Link href="/blog">Blog</Link>
         <Link href="/rules">Rules</Link>
         <Link href="/about">About</Link>
@@ -27,12 +28,12 @@ export function Footer() {
     <footer>
       <div className="wrap cols">
         <div style={{ maxWidth: 360 }}>
-          <strong>Weekly top-10 of AI tools &amp; SaaS</strong>
+          <strong>Weekly worldwide top 10</strong>
           <p style={{ margin: "6px 0 10px" }}>Who is winning this week, and what's launching.</p>
           <Newsletter source="footer" />
         </div>
         <div>
-          <Link href="/blog">Blog</Link><br /><Link href="/rules">Rules &amp; refunds</Link><br />
+          <Link href="/countries">Countries</Link><br /><Link href="/blog">Blog</Link><br /><Link href="/rules">Rules &amp; refunds</Link><br /><Link href="/recover">Find my dashboard</Link><br />
           <Link href="/about">About</Link><br /><Link href="/rss.xml">RSS</Link><br />
           <Link href="/api/v1/leaderboard">API</Link>
         </div>
@@ -43,7 +44,7 @@ export function Footer() {
 }
 
 export function Ticker() {
-  const rows = getBoard({ period: "all", limit: 10 });
+  const rows = getBoard({ scope: "world", period: "all", limit: 10 });
   const render = (prefix: string) =>
     rows.length ? (
       rows.map((r, i) => (
@@ -52,7 +53,7 @@ export function Ticker() {
         </span>
       ))
     ) : (
-      <span key={prefix}><b>LIVE</b> <span className="t">The billboard is empty. Claim the first slot.</span></span>
+      <span key={prefix}><b>LIVE</b> <span className="t">The worldwide board is empty. Claim the first slot.</span></span>
     );
   return (
     <div className="ticker" aria-label="Live leaderboard ticker">

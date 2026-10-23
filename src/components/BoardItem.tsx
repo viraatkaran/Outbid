@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { BoardRow } from "../lib/rank";
 import { categoryLabel, fmtUsd } from "../lib/config";
+import { countryFlag, countryName } from "../lib/countries";
 
 export default function BoardItem({ row, rank }: { row: BoardRow; rank: number }) {
   return (
@@ -15,7 +16,7 @@ export default function BoardItem({ row, rank }: { row: BoardRow; rank: number }
         </h3>
         <p>{row.description || row.domain}</p>
         <div className="meta">
-          {categoryLabel(row.category)} · {" "}
+          {countryFlag(row.country)} {countryName(row.country)} · {categoryLabel(row.category)} · {" "}
           <a href={`/go/${row.slug}`} target="_blank" rel="sponsored nofollow noopener">{row.domain}</a> · {row.clicks.toLocaleString()} verified clicks
           <span className="sponsored">paid placement</span>
         </div>

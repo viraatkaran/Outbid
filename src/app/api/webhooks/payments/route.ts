@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { ValidationError, fulfillOrder } from "../../../../lib/listings";
+import { ValidationError } from "../../../../lib/listings";
+import { completeOrder } from "../../../../lib/notify";
 import { verifyWebhookSignature } from "../../../../lib/payments";
 
 /** Generic signed webhook: body {orderId, paymentRef}, header x-signature = hex HMAC-SHA256(body). Adapt per provider. */
@@ -10,7 +11,7 @@ export async function POST(req: Request) {
   try { b = JSON.parse(raw); } catch { return NextResponse.json({ error: "Bad JSON" }, { status: 400 }); }
   if (!b.orderId || !b.paymentRef) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   try {
-    fulfillOrder(b.orderId, b.paymentRef);
+    await completeOrder(b.orderId, b.paymentRef);
     return NextResponse.json({ ok: true });
   } catch (e) {
     if (e instanceof ValidationError) return NextResponse.json({ error: e.message }, { status: 400 });

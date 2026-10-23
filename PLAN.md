@@ -181,3 +181,20 @@ Check domains, trademarks and social handles before committing.
 | TopSpot.ai | short, memorable |
 
 Top picks: **ToolTower**, **AIPodium**, **RankRush**.
+
+---
+
+## 14. Ranking levels and starting prices (built)
+
+Every business lists in **one country and one category** and can pay at three levels. A payment counts on its own board and every board below it.
+
+| Level | Board | Counts on | Start price (high income) | Middle income | Lower income |
+|---|---|---|---|---|---|
+| Category | Country + category (e.g. Plumbing in New Zealand) | category board | $5 | $3 | $2 |
+| Country | All categories in a country, top 100 | country + category boards | $29 | $17 | $10 |
+| Worldwide | Global top 100 | world + country + category boards | $99 | $99 | $99 |
+
+- First payment at each level must reach the start price. After that, each payment at that level is at least $1.
+- Country income tiers (adjustable in `src/lib/countries.ts`) set the multiplier: 1.0 / 0.6 / 0.35. Sanctioned jurisdictions are not offered.
+- Why these numbers: category is a low-risk entry point for local businesses, country is the main product, worldwide is premium and scarce (100 slots). Test them with real buyers and adjust.
+- Emails: receipt with private dashboard link (new listings only), "you were outbid" alerts (once per board per day, can be switched off), dashboard-link recovery, weekly digest.

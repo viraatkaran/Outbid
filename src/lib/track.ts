@@ -50,6 +50,6 @@ export function listingAnalytics(listingId: number) {
     `SELECT COALESCE(SUM(verified),0) AS verified, COUNT(*) AS raw FROM clicks WHERE listing_id=?`,
   ).get(listingId) as { verified: number; raw: number };
   const spent = (d.prepare("SELECT COALESCE(SUM(amount_cents),0) AS n FROM bids WHERE listing_id=?").get(listingId) as { n: number }).n;
-  const bids = d.prepare("SELECT amount_cents, created_at FROM bids WHERE listing_id=? ORDER BY id DESC LIMIT 20").all(listingId) as { amount_cents: number; created_at: string }[];
+  const bids = d.prepare("SELECT amount_cents, scope, created_at FROM bids WHERE listing_id=? ORDER BY id DESC LIMIT 20").all(listingId) as { amount_cents: number; scope: string; created_at: string }[];
   return { days, referrers, countries, totals, spent, bids };
 }
