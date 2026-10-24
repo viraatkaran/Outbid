@@ -19,4 +19,5 @@ ENV NEXT_PUBLIC_BRAND_NAME=$NEXT_PUBLIC_BRAND_NAME \
 RUN npm run build
 
 ENV NODE_ENV=production
-CMD ["npm", "start"]
+# Run Next directly (not through npm) so the stop signal on redeploy ends the old container cleanly instead of being reported as a crash
+CMD ["node", "node_modules/next/dist/bin/next", "start"]
