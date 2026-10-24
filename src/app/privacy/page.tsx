@@ -18,7 +18,7 @@ export default function Privacy() {
         <li><strong>Messages</strong> you send through the contact form.</li>
       </ul>
       <h2>Cookies and similar storage</h2>
-      <p>We do not use advertising or tracking cookies. Your browser stores one small setting (light or dark theme) on your device.</p>
+      <p>We do not use advertising or tracking cookies. Your browser stores one small setting (light or dark theme) on your device. We count page views with our own simple analytics: the page visited, the referring site, your device type and browser language region, plus a one-way daily hash of your IP address and browser that cannot be reversed and changes every day. We do not store your IP address or share this data with advertisers.</p>
       <h2>Who we share data with</h2>
       <ul>
         <li><strong>Stripe</strong> (payments), <strong>Resend</strong> (sending email), and <strong>Railway</strong> (hosting and database).</li>

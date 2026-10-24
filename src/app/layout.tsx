@@ -7,6 +7,7 @@ const siteSchema = JSON.stringify([
   { "@context": "https://schema.org", "@type": "WebSite", name: BRAND, url: SITE_URL },
 ]).replace(/</g, "\\u003c");
 import { Footer, Header, Ticker } from "../components/Shell";
+import Beacon from "../components/Beacon";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: siteSchema }} /></head>
       <body>
+        <Beacon />
         <Ticker />
         <div className="wrap"><Header />{children}</div>
         <Footer />

@@ -14,6 +14,7 @@ import { CATEGORIES, isCategory } from "../src/lib/config";
 import { db } from "../src/lib/db";
 import { parsePost } from "../src/lib/blog";
 import crypto from "node:crypto";
+import { isAllowed, signSession, verifySession } from "../src/lib/adminAuth";
 import { verifyStripeSignature } from "../src/lib/stripe";
 
 const tick = () => new Promise((r) => setTimeout(r, 60));
@@ -175,4 +176,18 @@ test("blog posts: raw HTML dropped, unsafe links neutralised, reading time compu
   assert.ok(p.html.includes('href="/countries"'));
   assert.deepEqual(p.keywords, ["a", "b", "c"]);
   assert.equal(p.minutes, 2);
+});
+
+test("admin sign-in: only the three approved Google accounts, tamper-proof cookie", () => {
+  assert.ok(isAllowed("19101989karan@gmail.com"));
+  assert.ok(isAllowed("CodeBluePulse@gmail.com"));
+  assert.ok(isAllowed("nzaucklandkaran@gmail.com"));
+  assert.ok(!isAllowed("someone.else@gmail.com"));
+  const t = signSession("codebluepulse@gmail.com");
+  assert.equal(verifySession(t), "codebluepulse@gmail.com");
+  assert.equal(verifySession(t.slice(0, -2) + "xx"), null);
+  assert.equal(verifySession(undefined), null);
+  const forged = Buffer.from(JSON.stringify({ e: "evil@x.com", x: Date.now() + 1e9 })).toString("base64url") + ".abc";
+  assert.equal(verifySession(forged), null);
+  assert.equal(verifySession(signSession("evil@x.com")), null);
 });

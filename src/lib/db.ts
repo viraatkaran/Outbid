@@ -84,6 +84,22 @@ CREATE TABLE IF NOT EXISTS messages (
   message TEXT NOT NULL,
   created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS pageviews (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  day TEXT NOT NULL,
+  path TEXT NOT NULL,
+  visitor_hash TEXT NOT NULL,
+  referrer TEXT,
+  lang_region TEXT,
+  device TEXT NOT NULL DEFAULT 'desktop',
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_pageviews_day ON pageviews(day);
+CREATE TABLE IF NOT EXISTS kv (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS reports (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   listing_id INTEGER NOT NULL,

@@ -27,7 +27,7 @@ Audience for posts: **small and medium businesses everywhere** (trades, clinics,
 5. **Write the post** to the rules below.
 6. **Run `npm ci && npm test && npm run check-blog`**. Fix every failure. Do not weaken the checker.
 7. **Open a pull request** from a branch named `claude/<task-id>` touching only `content/blog/<slug>.md` and `content/keyword-pool.csv`. A GitHub workflow validates it and merges it automatically when it only touches those paths; anything else waits for the owner.
-8. **Queue ahead when useful.** A post whose `date` is in the future stays hidden until that day (UTC), so you can prepare a week at once; never more than 7 days ahead.
+8. **Keep a 3-day buffer, always.** A post whose `date` is in the future stays hidden until that day (UTC) and then publishes by itself. At the end of every cycle posts must already be merged and dated for each of the next 3 days (tomorrow, +2, +3): one post per date, never two on the same day. If the buffer is below 3 days, fill it before doing anything else; on the first run catch up in one go. Each day add exactly one new post dated 3 days ahead, and report the dates of the scheduled posts in your update. Never more than 7 days ahead.
 
 ## Post format
 File: `content/blog/<slug>.md`, `<slug>` is lowercase-kebab-case and reads like the topic.
