@@ -1,0 +1,45 @@
+name: Blog gate
+
+# Checks every pull request. A pull request from a claude/* branch that changes ONLY blog content
+# is merged automatically once it passes; anything else waits for the owner.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_PATH: ./data/ci.db
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Does this change only touch blog content?
+        id: scope
+        run: |
+          files=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")
+          echo "$files"
+          if [ -z "$files" ]; then echo "blog_only=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if echo "$files" | grep -qvE '^content/(blog/[a-z0-9-]+\.md|keyword-pool\.csv|backlinks\.csv)$'; then
+            echo "blog_only=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "blog_only=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run check-blog
+      - run: npm run build
+      - name: Merge blog-only pull request
+        if: steps.scope.outputs.blog_only == 'true' && startsWith(github.head_ref, 'claude/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge "${{ github.event.pull_request.number }}" --squash --delete-branch

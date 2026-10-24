@@ -34,6 +34,7 @@ export function Footer() {
         </div>
         <div>
           <Link href="/countries">Countries</Link><br /><Link href="/blog">Blog</Link><br /><Link href="/rules">Rules &amp; refunds</Link><br /><Link href="/recover">Find my dashboard</Link><br />
+          <Link href="/contact">Contact</Link><br /><Link href="/privacy">Privacy</Link><br /><Link href="/terms">Terms</Link><br />
           <Link href="/about">About</Link><br /><Link href="/rss.xml">RSS</Link><br />
           <Link href="/api/v1/leaderboard">API</Link>
         </div>

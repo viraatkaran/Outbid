@@ -1,6 +1,8 @@
 import { BRAND, SITE_URL } from "../../lib/config";
 import { getPosts } from "../../lib/blog";
 
+export const dynamic = "force-dynamic";
+
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 export async function GET() {

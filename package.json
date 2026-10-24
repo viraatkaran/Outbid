@@ -8,7 +8,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "check-blog": "tsx scripts/check-blog.ts"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",

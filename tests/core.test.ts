@@ -12,6 +12,7 @@ import { COUNTRIES, getCountryBySlug, isCountryCode } from "../src/lib/countries
 import { floorCents, type Scope } from "../src/lib/pricing";
 import { CATEGORIES, isCategory } from "../src/lib/config";
 import { db } from "../src/lib/db";
+import { parsePost } from "../src/lib/blog";
 import crypto from "node:crypto";
 import { verifyStripeSignature } from "../src/lib/stripe";
 
@@ -165,4 +166,13 @@ test("stripe webhook signature", () => {
   assert.ok(!verifyStripeSignature(body, `t=${t},v1=${sig}`, "other", t + 10), "wrong secret");
   assert.ok(!verifyStripeSignature(body, `t=${t},v1=${sig}`, secret, t + 3600), "too old");
   assert.ok(!verifyStripeSignature(body, null, secret, t) && !verifyStripeSignature(body, `t=${t},v1=${sig}`, undefined, t));
+});
+
+test("blog posts: raw HTML dropped, unsafe links neutralised, reading time computed", () => {
+  const p = parsePost("t", "---\ntitle: T\ndate: 2026-01-01\nkeywords: a, b, c\n---\nHello <script>alert(1)</script> [bad](javascript:alert(1)) [ok](/countries)\n\n## H\n" + "word ".repeat(450));
+  assert.ok(!p.html.includes("<script"), "script tag removed");
+  assert.ok(!p.html.includes("javascript:"), "javascript: link neutralised");
+  assert.ok(p.html.includes('href="/countries"'));
+  assert.deepEqual(p.keywords, ["a", "b", "c"]);
+  assert.equal(p.minutes, 2);
 });
