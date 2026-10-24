@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CATEGORY_GROUPS, categoryLabel } from "../lib/config";
 import { COUNTRIES, countryName, getCountry } from "../lib/countries";
 import { SCOPES, SCOPE_HELP, SCOPE_LABEL, floorCents, type Scope } from "../lib/pricing";
+import SearchSelect from "./SearchSelect";
 
 type Quote = { floors: Record<Scope, number>; leaders: Record<Scope, number> };
 const usd = (cents: number) => "$" + (cents / 100).toLocaleString("en-US", { maximumFractionDigits: 2 });
@@ -97,16 +98,16 @@ export default function ClaimForm({ defaults }: { defaults?: { country?: string;
 
       <div className="claim">
         <input value={url} onChange={(e) => setUrl(e.target.value)} required placeholder="Your website URL or @handle" aria-label="Website URL" />
-        <select value={country} onChange={(e) => { setCountry(e.target.value); setTouched(false); }} required aria-label="Country">
-          <option value="">Choose a country</option>
-          {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.flag} {c.name}</option>)}
-        </select>
-        <select value={category} onChange={(e) => { setCategory(e.target.value); setTouched(false); }} required aria-label="Category">
-          <option value="">Choose a category</option>
-          {CATEGORY_GROUPS.map((g) => (
-            <optgroup key={g.name} label={g.name}>{g.items.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}</optgroup>
-          ))}
-        </select>
+        <SearchSelect
+          label="Country" placeholder="Search for your country…" value={country}
+          onChange={(v) => { setCountry(v); setTouched(false); }}
+          options={COUNTRIES.map((c) => ({ value: c.code, label: `${c.flag} ${c.name}` }))}
+        />
+        <SearchSelect
+          label="Category" placeholder="Search for your category, e.g. plumbing…" value={category}
+          onChange={(v) => { setCategory(v); setTouched(false); }}
+          options={CATEGORY_GROUPS.flatMap((g) => g.items.map((c) => ({ value: c.slug, label: c.label, group: g.name })))}
+        />
         <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email for your dashboard and outbid alerts" aria-label="Email" />
         <button className="btn" disabled={busy || !url || !country || !category}>{busy ? "…" : "Claim rank"}</button>
       </div>

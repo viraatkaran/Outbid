@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { db } from "../../lib/db";
 import type { Listing } from "../../lib/listings";
+import { CATEGORY_GROUPS } from "../../lib/config";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin", robots: { index: false } };
@@ -27,6 +28,11 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
       <h2>Listings</h2>
       <table><tbody>{listings.map((l) => (
         <tr key={l.id}><td>{l.slug}</td><td>{l.status}</td><td>
+          <form method="post" action="/api/admin/category" style={{ display: "flex", gap: 4, marginBottom: 6 }}>
+            <input type="hidden" name="key" value={key} /><input type="hidden" name="id" value={l.id} />
+            <select name="category" defaultValue={l.category}>{CATEGORY_GROUPS.flatMap((g) => g.items).map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}</select>
+            <button>Change category</button>
+          </form>
           <form method="post" action="/api/admin/hide">
             <input type="hidden" name="key" value={key} /><input type="hidden" name="id" value={l.id} />
             <input type="hidden" name="status" value={l.status === "active" ? "hidden" : "active"} />
