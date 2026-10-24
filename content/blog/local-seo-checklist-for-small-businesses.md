@@ -46,6 +46,8 @@ When someone nearby searches for a service, the businesses that appear first get
 
 **15. Review the list every quarter.** Check that your details are still correct everywhere, add new photos, and respond to any review you missed.
 
+If you run a restaurant or cafe, see our guide on [getting more restaurant customers online](/blog/how-to-get-more-restaurant-customers-online) for the food-specific version of this checklist, including menus and delivery apps.
+
 ## How long does it take?
 
 Fixing the basics can bring results within weeks. Reviews and links build up over months. The businesses that win locally are rarely the ones with the cleverest tricks. They are the ones that stay accurate, helpful and visible for a long time.
