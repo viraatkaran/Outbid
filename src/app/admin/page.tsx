@@ -133,7 +133,7 @@ export default async function Admin() {
         </>
       ) : (
         <div role="status" style={{ border: "1px solid #e0a800", borderRadius: 10, padding: 12 }}>{gsc.message}
-          {gsc.reason === "not_connected" && <> <form method="post" action="/api/auth/logout" style={{ display: "inline" }}><button>Sign out</button></form></>}</div>
+          <div style={{ marginTop: 8 }}><a className="btn" href="/api/auth/google?gsc=1">Connect Search Console</a></div></div>
       )}
 
       <h2 id="blog">Blog</h2>

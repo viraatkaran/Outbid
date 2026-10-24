@@ -16,7 +16,7 @@ async function accessToken(refresh: string): Promise<string> {
       refresh_token: refresh, grant_type: "refresh_token",
     }),
   });
-  if (!r.ok) throw new Error("Google refused the saved Search Console permission. Sign out and sign in again, and tick the Search Console box.");
+  if (!r.ok) throw new Error("Google refused the saved Search Console permission. Click the Connect Search Console button again.");
   return ((await r.json()) as { access_token: string }).access_token;
 }
 
@@ -25,7 +25,7 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 /** Last 28 days of Search Console data (it lags about 2 days behind). */
 export async function getSearchConsole(): Promise<GscResult> {
   const refresh = kvGet("gsc_refresh_token");
-  if (!refresh) return { ok: false, reason: "not_connected", message: "Search Console is not connected yet. Sign out and sign in again, and tick the Search Console permission." };
+  if (!refresh) return { ok: false, reason: "not_connected", message: "Search Console is not connected yet. Click the Connect Search Console button and allow read-only access." };
   const site = process.env.GSC_SITE || "sc-domain:billboardrank.com";
   try {
     const token = await accessToken(refresh);
